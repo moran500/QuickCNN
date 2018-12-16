@@ -7,7 +7,7 @@ if __name__ == '__main__':
     
     # load pre-processed data set from keras where source are hand-made numbers from 0-9 and also split to trained and test data
     mnist = k.datasets.mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+    (x_train, y_train), (x_test, y_test) = mnist.load_data() 
     
     # this will plot the picture which is encode in input data
 #     plt.imshow(x_train[0])
