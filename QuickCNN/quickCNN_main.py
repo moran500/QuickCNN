@@ -46,7 +46,7 @@ if __name__ == '__main__':
     #translate the prediction
     print(np.argmax(prediction[0]))
     
-    plt.imshow(x_test[0],cmap=plt.cm.binary)
+    plt.imshow(x_test[0])
     plt.show()
     
     
