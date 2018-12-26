@@ -2,8 +2,17 @@
 import keras as k
 import matplotlib.pyplot as plt
 import numpy as np
+import time
+from keras.callbacks import TensorBoard
+
 
 if __name__ == '__main__':
+    
+    # define the name of the model
+    NAME = "quickCNN_MNIST_layers{}_neurals{}_{}".format(d_layer,d_neurons,int(time.time()))
+    
+    # define tensorboard, this variable has to be forward in the fit function when the model is training
+    tensorboard = TensorBoard(log_dir="log/{}".format(NAME))
     
     # load pre-processed data set from keras where source are hand-made numbers from 0-9 and also split to trained and test data
     mnist = k.datasets.mnist
@@ -16,10 +25,11 @@ if __name__ == '__main__':
     # normalizing training and test input data
     x_train = k.utils.normalize(x_train, axis=1)
     x_test = k.utils.normalize(x_test, axis=1)
+
     
     # create Sequential model
     model = k.models.Sequential()
-    
+             
     # define the layers in CNN
     # if we would work with our own pictures database then here we would need to add as input layer the Conv2D to transform the pictures to list of flat number vectors
     # because we have data set from Keras, we dont need to do it and we can just say that the input will be flat vector
@@ -28,25 +38,25 @@ if __name__ == '__main__':
     model.add(k.layers.Dense(128, activation='relu'))
     # add the output layer with activation function softmax
     model.add(k.layers.Dense(10,activation='softmax'))
-    
+     
     #compile the model with specify optimizer and loss function and metrics
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics = ['accuracy'])
-    
-    #train the model with train data
-    model.fit(x_train, y_train, epochs=10)
-    
+     
+    #train the model with train data together with validation of the network
+    model.fit(x_train, y_train, epochs=10, callbacks=[tensorboard], validation_data=[x_test, y_test])
+     
     # validate the model with test data
-    validate = model.evaluate(x_test, y_test)
-    print(validate)
-    
+#     validate = model.evaluate(x_test, y_test)
+#     print(validate)
+     
     #make prediction from test data
     prediction = model.predict(x_test)
     print(prediction[0])
-    
+     
     #translate the prediction
     print(np.argmax(prediction[0]))
-    
-    plt.imshow(x_test[0],cmap=plt.cm.binary)
-    plt.show()
+     
+#     plt.imshow(x_test[0],cmap=plt.cm.binary)
+#     plt.show()
     
     
